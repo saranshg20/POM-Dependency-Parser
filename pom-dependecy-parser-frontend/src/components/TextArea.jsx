@@ -14,12 +14,12 @@ function TextArea(props) {
     };
 
     return (
-        <div className="relative mt-4 w-1/2">
+        <div className={`relative mt-4 ${props.width}`}>
             <textarea
                 readOnly
-                content={props.content}
+                value={props.content}
                 ref={textareaRef}
-                className="p-2 rounded-md overflow-auto border border-black"
+                className={`${props.isSmallScreen ? 'p-8': 'p-4'} rounded-md overflow-auto border border-black`}
                 placeholder="Select Repository to retrieve POM dependencies"
                 style={{
                     resize: "none",
@@ -30,7 +30,8 @@ function TextArea(props) {
             />
             <div
                 id="copyToClipboard-a"
-                className="clipboard icon absolute top-2 right-2"
+                className="clipboard icon absolute top-2 right-4"
+                onClick={handleButtonClick}
             >
                 <img
                     className="cursor-pointer"
