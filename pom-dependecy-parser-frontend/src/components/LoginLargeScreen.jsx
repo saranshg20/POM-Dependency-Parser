@@ -3,7 +3,7 @@ import Loader from "./Loader";
 import HomeSmallScreen from "./HomeSmallScreen";
 import { Routes, useNavigate } from "react-router-dom";
 
-function Login() {
+function LoginLargeScreen() {
     const CLIENT_ID = "eaeda082a6cb9bc7e434";
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
@@ -61,8 +61,10 @@ function Login() {
                         POM Dependency Parser
                     </div>
                 </div>
+                <hr />
                 <div className="p-16 font-light">
-                    Welcome to our web application, a one-stop solution for all
+                    <span className="text-lg font-medium">
+                        Welcome</span> to our web application, a one-stop solution for all
                     your project object model (POM) related dependencies. This
                     application is designed to simplify and streamline your
                     development process by providing an easy-to-use interface
@@ -74,7 +76,7 @@ function Login() {
                     account, you can access and manage your project's
                     dependencies directly from our application.
                 </div>
-                <div className="text-center">
+                <div className="text-center mb-8">
                     <button className="bg-slate-800 p-3 rounded-md shadow-lg text-white" onClick={loginWithGithub}>
                         <div className="flex">
                             <div className="mr-2">Connect with Github</div>
@@ -92,4 +94,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default LoginLargeScreen;
