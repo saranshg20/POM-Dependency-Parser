@@ -14,24 +14,19 @@ function App() {
 
     return (
         <Routes>
-            <Route path="/login/*"                 element={
-                    isSmallScreen?
-                        <LoginSmallScreen />: <LoginLargeScreen />
-                }/>
+            <Route
+                path="/login"
+                element={
+                    isSmallScreen ? <LoginSmallScreen /> : <LoginLargeScreen />
+                }
+            />
             <Route path="/" element={<Navigate to="/login" />} />
             <Route
                 path="/home"
                 element={
-                    isSmallScreen?
-                        <HomeSmallScreen />: <HomeLargeScreen />
+                    isSmallScreen ? <HomeSmallScreen /> : <HomeLargeScreen />
                 }
             />
-            {/* <Route
-                path="/home"
-                element={
-                        <ProtectedRoute component={HomeSmallScreen} />
-                }
-            /> */}
         </Routes>
     );
 }
