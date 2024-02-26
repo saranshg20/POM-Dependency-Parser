@@ -6,7 +6,7 @@ function CardLg(props) {
             <div className="flex justify-between">
                 <div className="text-xl font-light">{props.RepoName}</div>
                 <div className="flex">
-                    <div onClick={props.getDependencies(props.RepoId)}>
+                    <div onClick={() => props.getDependencies(props.RepoId)}>
                         <img
                             className="mr-6 cursor-pointer"
                             width="30"
