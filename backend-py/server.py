@@ -66,7 +66,7 @@ def pom_parser(data):
 
 
 # Assuming POM.xml to be present in root
-@app.route('/getPOMFiles', methods=["POST"])
+@app.route('/getPOMDependencies', methods=["POST"])
 def getPOMFiles():
     try:
         user = request.get_json()['user']
@@ -78,9 +78,8 @@ def getPOMFiles():
         r = requests.get(url, headers=headers)
         # Parse the JSON response into a Python dictionary
         data = json.loads(r.text)
-        print(pom_parser(data))
-        r.raise_for_status()
-        return r.json()
+        data = jsonify(pom_parser(data))
+        return data
     except requests.exceptions.RequestException as e:
         return jsonify({'error': str(e)})
     except KeyError as e:
