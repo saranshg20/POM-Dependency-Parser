@@ -14,7 +14,7 @@ function HomeLargeScreen(props) {
     const [repoData, setRepoData] = useState();
     const [textareaText, setTextArea] = useState("");
     const navigate = useNavigate();
-    const backend_url = "http://localhost:4000";
+    const backend_url = import.meta.env.VITE_BACKEND_URL;
 
     async function getUserData() {
         await fetch(backend_url + "/getUserData", {
@@ -55,6 +55,7 @@ function HomeLargeScreen(props) {
                 values.sort(
                     (a, b) => new Date(b.created_at) - new Date(a.created_at)
                 );
+
                 setRepoData(values);
             })
             .catch((error) => {
@@ -111,9 +112,11 @@ function HomeLargeScreen(props) {
     }
 
     useEffect(() => {
+        setIsLoading(true);
         getUserData();
         getRepositories();
-        setRerender(!rerender);
+        // setRerender(!rerender);
+        setIsLoading(false);
     }, []);
 
     return (

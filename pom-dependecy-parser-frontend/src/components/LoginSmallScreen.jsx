@@ -4,7 +4,7 @@ import HomeSmallScreen from "./HomeSmallScreen";
 import { Routes, useNavigate } from "react-router-dom";
 
 function LoginLargeScreen() {
-    const CLIENT_ID = "eaeda082a6cb9bc7e434";
+    const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -18,37 +18,39 @@ function LoginLargeScreen() {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const code = urlParams.get("code");
+
         if (localStorage.getItem("accessToken") !== null) {
             console.log("Navigating to /home");
             navigate("/home");
         } else if (code && localStorage.getItem("accessToken") === null) {
             setIsLoading(true);
             async function getAccessToken() {
-                await fetch(
-                    "http://localhost:4000/getAccessToken?code=" + code,
-                    {
-                        method: "GET",
-                    }
-                )
-                    .then((response) => {
-                        return response.json();
-                    })
-                    .then((data) => {
-                        console.log(data);
-                        if (data.access_token) {
-                            localStorage.setItem(
-                                "accessToken",
-                                data.access_token
-                            );
+                try {
+                    const response = await fetch(
+                        import.meta.env.VITE_BACKEND_URL +
+                            "getAccessToken?code=" +
+                            code,
+                        {
+                            method: "GET",
                         }
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
+                    );
+
+                    const data = await response.json();
+                    console.log(data);
+
+                    if (data.access_token) {
+                        localStorage.setItem("accessToken", data.access_token);
+                    }
+                    navigate("/home");
+                } catch (error) {
+                    console.error(error);
+                } finally {
+                    setIsLoading(false);
+                }
             }
+
+            // Call the async function
             getAccessToken();
-            setIsLoading(false);
-            navigate("/home");
         }
     }, []);
 
@@ -63,21 +65,24 @@ function LoginLargeScreen() {
                 </div>
                 <hr />
                 <div className="p-16 font-light">
-                    <span className="text-lg font-medium">
-                        Welcome</span> to our web application, a one-stop solution for all
-                    your project object model (POM) related dependencies. This
-                    application is designed to simplify and streamline your
-                    development process by providing an easy-to-use interface
-                    for managing your project's dependencies. 
+                    <span className="text-lg font-medium">Welcome</span> to our
+                    web application, a one-stop solution for all your project
+                    object model (POM) related dependencies. This application is
+                    designed to simplify and streamline your development process
+                    by providing an easy-to-use interface for managing your
+                    project's dependencies.
                     <br />
-                    Our application
-                    integrates with GitHub for user authentication, ensuring a
-                    secure and seamless login experience. By using your GitHub
-                    account, you can access and manage your project's
-                    dependencies directly from our application.
+                    Our application integrates with GitHub for user
+                    authentication, ensuring a secure and seamless login
+                    experience. By using your GitHub account, you can access and
+                    manage your project's dependencies directly from our
+                    application.
                 </div>
                 <div className="text-center mb-8">
-                    <button className="bg-slate-800 p-3 rounded-md shadow-lg text-white" onClick={loginWithGithub}>
+                    <button
+                        className="bg-slate-800 p-3 rounded-md shadow-lg text-white"
+                        onClick={loginWithGithub}
+                    >
                         <div className="flex">
                             <div className="mr-2">Connect with Github</div>
                             <img

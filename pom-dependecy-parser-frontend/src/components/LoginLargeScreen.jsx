@@ -4,7 +4,7 @@ import HomeSmallScreen from "./HomeSmallScreen";
 import { Routes, useNavigate } from "react-router-dom";
 
 function LoginLargeScreen() {
-    const CLIENT_ID = "eaeda082a6cb9bc7e434";
+    const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -18,37 +18,39 @@ function LoginLargeScreen() {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const code = urlParams.get("code");
+
         if (localStorage.getItem("accessToken") !== null) {
             console.log("Navigating to /home");
             navigate("/home");
         } else if (code && localStorage.getItem("accessToken") === null) {
             setIsLoading(true);
             async function getAccessToken() {
-                await fetch(
-                    "http://localhost:4000/getAccessToken?code=" + code,
-                    {
-                        method: "GET",
-                    }
-                )
-                    .then((response) => {
-                        return response.json();
-                    })
-                    .then((data) => {
-                        console.log(data);
-                        if (data.access_token) {
-                            localStorage.setItem(
-                                "accessToken",
-                                data.access_token
-                            );
+                try {
+                    const response = await fetch(
+                        import.meta.env.VITE_BACKEND_URL +
+                            "getAccessToken?code=" +
+                            code,
+                        {
+                            method: "GET",
                         }
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
+                    );
+
+                    const data = await response.json();
+                    console.log(data);
+
+                    if (data.access_token) {
+                        localStorage.setItem("accessToken", data.access_token);
+                    }
+                    navigate("/home");
+                } catch (error) {
+                    console.error(error);
+                } finally {
+                    setIsLoading(false);
+                }
             }
+
+            // Call the async function
             getAccessToken();
-            setIsLoading(false);
-            navigate("/home");
         }
     }, []);
 

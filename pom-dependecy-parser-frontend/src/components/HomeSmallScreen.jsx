@@ -11,8 +11,9 @@ function HomeSmallScreen(props) {
     const [userData, setUserData] = useState({});
     const [textareaText, setTextArea] = useState("");
     const [repoData, setRepoData] = useState();
+    const [rerender, setRerender] = useState(false);
     const navigate = useNavigate();
-    const backend_url = "http://localhost:4000";
+    const backend_url = import.meta.env.VITE_BACKEND_URL;
 
     async function getUserData() {
         await fetch(backend_url + "/getUserData", {
@@ -36,6 +37,7 @@ function HomeSmallScreen(props) {
     }
 
     async function getRepositories() {
+        console.log(localStorage.getItem("accessToken"));
         await fetch(backend_url + "/repositories", {
             method: "GET",
             credentials: "include",
@@ -49,11 +51,12 @@ function HomeSmallScreen(props) {
                 return response.json();
             })
             .then((data) => {
-                data.sort(
+                const values = Object.values(data);
+                values.sort(
                     (a, b) => new Date(b.created_at) - new Date(a.created_at)
                 );
-                console.log(data);
-                setRepoData(data);
+                console.log(values);
+                setRepoData(values);
             })
             .catch((error) => {
                 console.log(error);
@@ -111,7 +114,7 @@ function HomeSmallScreen(props) {
     useEffect(() => {
         getUserData();
         getRepositories();
-        // setRerender(!rerender);
+        setRerender(!rerender);
     }, []);
 
 
