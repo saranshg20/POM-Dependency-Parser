@@ -14,6 +14,9 @@ load_dotenv()
 CLIENT_ID = os.environ.get("CLIENT_ID")
 CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
 
+# Default port is 5000
+PORT=int(os.environ.get('PORT',5000))
+
 
 # Initialize flask server and cors
 app = Flask(__name__)
@@ -43,7 +46,6 @@ def get_access_token():
 # fetch user github profile data
 @app.route('/getUserData', methods=['GET'])
 def get_user_data():
-    print(request.headers)
     headers = {'Authorization': request.headers['Authorization']}
     response = requests.get('https://api.github.com/user', headers=headers)
     data = response.json()
@@ -87,4 +89,4 @@ def getPOMFiles():
 
 
 if __name__ == '__main__':
-    app.run(port=4000, debug=True)
+    app.run(port=PORT, debug=True)
