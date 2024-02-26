@@ -1,28 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Loader from "./Loader";
 import DialogBox from "./DialogBox";
-import Card from "./Card";
+import TextArea from "./TextArea";
+import CardLg from "./CardLg";
 import { useNavigate } from "react-router-dom";
 
 function HomeSmallScreen(props) {
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [userData, setUserData] = useState({});
-    const [dialogBox, setDialogBox] = useState(false);
-    let repo_data = null;
+    const [textareaText, setTextArea] = useState("");
+    const [repoData, setRepoData] = useState();
     const navigate = useNavigate();
     const backend_url = "http://localhost:4000";
 
-    function popUpDialogBox() {
-        try {
-            setDialogBox(true);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     async function getUserData() {
-        setIsLoading(true);
         await fetch(backend_url + "/getUserData", {
             method: "GET",
             credentials: "include",
@@ -36,17 +28,14 @@ function HomeSmallScreen(props) {
                 return response.json();
             })
             .then((data) => {
-                console.log(data);
                 setUserData(data);
             })
             .catch((error) => {
                 console.log(error);
             });
-        setIsLoading(false);
     }
 
     async function getRepositories() {
-        setIsLoading(true);
         await fetch(backend_url + "/repositories", {
             method: "GET",
             credentials: "include",
@@ -60,13 +49,52 @@ function HomeSmallScreen(props) {
                 return response.json();
             })
             .then((data) => {
+                data.sort(
+                    (a, b) => new Date(b.created_at) - new Date(a.created_at)
+                );
                 console.log(data);
-                repo_data = data;
+                setRepoData(data);
             })
             .catch((error) => {
                 console.log(error);
             });
-        setIsLoading(false);
+    }
+
+    async function getDependencies(repoIdx) {
+        try {
+            const repoName = repoData[repoIdx].name;
+            const user = userData.login;
+    
+            if (
+                localStorage.getItem("accessToken") === undefined ||
+                localStorage.getItem("accessToken") === null
+            ) {
+                logoutUser();
+            }
+    
+            await fetch(backend_url + "/getPOMDependencies", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    'Authorization': "Bearer " + localStorage.getItem("accessToken"),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 'user':user, 'repo': repoName })
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log(JSON.stringify(data));
+                setTextArea(JSON.stringify(data));
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     function logoutUser() {
@@ -80,19 +108,23 @@ function HomeSmallScreen(props) {
         }
     }
 
+    useEffect(() => {
+        getUserData();
+        getRepositories();
+        // setRerender(!rerender);
+    }, []);
+
+
     return (
         <>
-            {isLoading ? (
-                <Loader />
-            ) : (
-                null
-            )}
-                <div className="flex-col">
-                    <div className="flex justify-between items-center">
-                        <div className="text-xl font-bold p-6 text-slate-800">
-                            POM-Dependency Parser
-                        </div>
-                        <div className="relative p-6">
+        {isLoading ? <Loader /> : null}
+
+        <div className="flex-col p-4">
+            <div className="flex justify-between items-center">
+                <div className="text-2xl font-light">
+                    POM Dependency Parser
+                </div>
+                <div className="relative p-4">
                             <button
                                 onClick={() => setIsOpen(!isOpen)}
                                 className="focus:outline-none"
@@ -129,26 +161,39 @@ function HomeSmallScreen(props) {
                                 </div>
                             )}
                         </div>
-                    </div>
-                </div>
-            {dialogBox ? (
-                <div className="">
-                    <DialogBox setDialogBox={setDialogBox} />
-                </div>
-            ) : null}
-            <div>
-                <div onClick={() => popUpDialogBox()}>
-                    <Card />
-                </div>
-                <div onClick={() => popUpDialogBox()}>
-                    <Card />
-                </div>
-                <div onClick={() => popUpDialogBox()}>
-                    <Card />
-                </div>
             </div>
-        </>
+            <div>
+                <hr />
+            </div>
+            <div className="p-4 text-xl text-center mt-4 mb-4 font-light">
+                {userData.name !== undefined
+                    ? `Welcome ${userData.name}!!`
+                    : null}
+            </div>
+            <div className="flex justify-center">
+                <TextArea isSmallScreen={true} width="w-4/5" content={textareaText} />
+            </div>
+            <div className="flex-col">
+                {repoData !== undefined && repoData !== null ? (
+                    Object.values(repoData).map((value, index) => (
+                        <div key={index} className="flex justify-center">
+                            <CardLg
+                                isSmallScreen={true}
+                                RepoId={index}
+                                RepoName={value.name}
+                                RepoURL={value.html_url}
+                                getDependencies={getDependencies}
+                            />
+                        </div>
+                    ))
+                ) : (
+                    <Loader />
+                )}
+            </div>
+        </div>
+    </>
     );
 }
 
 export default HomeSmallScreen;
+

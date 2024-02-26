@@ -5,7 +5,7 @@ import Card from "./Card";
 import { useNavigate } from "react-router-dom";
 import CardLg from "./CardLg";
 import Error from "./Error";
-import TextArea from "./TextAreaLargeScreen";
+import TextArea from "./TextArea";
 
 function HomeLargeScreen(props) {
     const [isLoading, setIsLoading] = useState(false);
@@ -51,11 +51,11 @@ function HomeLargeScreen(props) {
                 return response.json();
             })
             .then((data) => {
-                data.sort(
+                const values = Object.values(data);
+                values.sort(
                     (a, b) => new Date(b.created_at) - new Date(a.created_at)
                 );
-                console.log(data);
-                setRepoData(data);
+                setRepoData(values);
             })
             .catch((error) => {
                 console.log(error);
@@ -129,7 +129,7 @@ function HomeLargeScreen(props) {
                         className="cursor-pointer text-center pr-16 text-gray-600"
                         onClick={logoutUser}
                     >
-                        Logout
+                        <span className="hover:underline">Logout</span>
                     </div>
                 </div>
                 <div>
@@ -141,13 +141,15 @@ function HomeLargeScreen(props) {
                         : null}
                 </div>
                 <div className="flex justify-center">
-                    <TextArea content={textareaText} />
+                    <TextArea isSmallScreen={false} width="w-1/2" content={textareaText} />
+                    {console.log("TextArea updated")}
                 </div>
                 <div className="flex-col">
                     {repoData !== undefined && repoData !== null ? (
                         Object.values(repoData).map((value, index) => (
                             <div key={index} className="flex justify-center">
                                 <CardLg
+                                    isSmallScreen={false}
                                     RepoId={index}
                                     RepoName={value.name}
                                     RepoURL={value.html_url}
