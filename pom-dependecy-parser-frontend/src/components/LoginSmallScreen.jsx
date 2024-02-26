@@ -65,18 +65,20 @@ function LoginLargeScreen() {
                 </div>
                 <hr />
                 <div className="p-16 font-light">
-                    <span className="text-lg font-medium">Welcome</span> to our
-                    web application, a one-stop solution for all your project
-                    object model (POM) related dependencies. This application is
-                    designed to simplify and streamline your development process
-                    by providing an easy-to-use interface for managing your
-                    project's dependencies.
+                    <span className="font-normal">Welcome</span> to our web
+                    application, a comprehensive solution for parsing Project
+                    Object Model (POM) dependencies. This tool is designed to
+                    enhance and simplify your development workflow by offering a
+                    user-friendly interface for handling your project's
+                    dependencies.
                     <br />
-                    Our application integrates with GitHub for user
-                    authentication, ensuring a secure and seamless login
-                    experience. By using your GitHub account, you can access and
-                    manage your project's dependencies directly from our
-                    application.
+                    To ensure a secure and seamless login experience, our
+                    application seamlessly integrates with GitHub for user
+                    authentication through OAuth 2.0. Once authenticated, users
+                    are directed to the home page where they can explore all
+                    their public repositories. From there, they can easily
+                    select the repository of interest to retrieve and manage all
+                    the POM dependencies associated with it.
                 </div>
                 <div className="text-center mb-8">
                     <button
