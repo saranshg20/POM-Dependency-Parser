@@ -2,7 +2,8 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import Loader from "./components/Loader";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "./components/Login";
+import LoginLargeScreen from "./components/LoginLargeScreen";
+import LoginSmallScreen from "./components/LoginSmallScreen";
 import HomeSmallScreen from "./components/HomeSmallScreen";
 import { useMediaQuery } from "react-responsive";
 import ProtectedRoute from "./hoc/Protected_Route";
@@ -13,7 +14,10 @@ function App() {
 
     return (
         <Routes>
-            <Route path="/login/*" element={<Login />} />
+            <Route path="/login/*"                 element={
+                    isSmallScreen?
+                        <LoginSmallScreen />: <LoginLargeScreen />
+                }/>
             <Route path="/" element={<Navigate to="/login" />} />
             <Route
                 path="/home"
