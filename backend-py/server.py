@@ -7,12 +7,14 @@ from dotenv import load_dotenv
 import os
 import parser
 from datetime import datetime, timedelta
+import logging
 
 
 # Load env variables 
 load_dotenv()
 CLIENT_ID = os.environ.get("CLIENT_ID")
 CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
+
 
 # Default port is 5000
 PORT=int(os.environ.get('PORT',5000))
@@ -21,6 +23,13 @@ PORT=int(os.environ.get('PORT',5000))
 # Initialize flask server and cors
 app = Flask(__name__)
 CORS(app, supports_credentials=True, origins='*')
+
+
+# Set up the logger
+gunicorn_logger = logging.getLogger('gunicorn.error')
+app.logger.handlers = gunicorn_logger.handlers
+app.logger.setLevel(gunicorn_logger.level)
+
 
 # User access token from github api
 @app.route('/getAccessToken', methods=['GET'])
@@ -63,7 +72,7 @@ def get_repositories():
 def pom_parser(data):
     base64_content = data['content']
     decoded_content = base64.b64decode(base64_content).decode('utf-8')
-    print(decoded_content)
+    app.logger.info(decoded_content)
     return parser.parser(decoded_content)
 
 
