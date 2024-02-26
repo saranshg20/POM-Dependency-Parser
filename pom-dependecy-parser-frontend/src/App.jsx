@@ -1,12 +1,9 @@
 import "./App.css";
-import { useEffect, useState } from "react";
-import Loader from "./components/Loader";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginLargeScreen from "./components/LoginLargeScreen";
 import LoginSmallScreen from "./components/LoginSmallScreen";
 import HomeSmallScreen from "./components/HomeSmallScreen";
 import { useMediaQuery } from "react-responsive";
-import ProtectedRoute from "./hoc/Protected_Route";
 import HomeLargeScreen from "./components/HomeLargeScreen";
 
 function App() {
