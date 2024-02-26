@@ -8,12 +8,11 @@ import Error from "./Error";
 import TextArea from "./TextAreaLargeScreen";
 
 function HomeLargeScreen(props) {
-    const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [userData, setUserData] = useState({});
-    const [dialogBox, setDialogBox] = useState(false);
     const [rerender, setRerender] = useState(false);
     const [repoData, setRepoData] = useState();
+    const [textareaText, setTextArea] = useState("");
     const navigate = useNavigate();
     const backend_url = "http://localhost:4000";
 
@@ -63,8 +62,41 @@ function HomeLargeScreen(props) {
             });
     }
 
-    function getDependencies(){
-
+    async function getDependencies(repoIdx) {
+        try {
+            const repoName = repoData[repoIdx].name;
+            const user = userData.login;
+    
+            if (
+                localStorage.getItem("accessToken") === undefined ||
+                localStorage.getItem("accessToken") === null
+            ) {
+                logoutUser();
+            }
+    
+            await fetch(backend_url + "/getPOMDependencies", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    'Authorization': "Bearer " + localStorage.getItem("accessToken"),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 'user':user, 'repo': repoName })
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log(JSON.stringify(data));
+                setTextArea(JSON.stringify(data));
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     function logoutUser() {
@@ -109,13 +141,18 @@ function HomeLargeScreen(props) {
                         : null}
                 </div>
                 <div className="flex justify-center">
-                        <TextArea/>
+                    <TextArea content={textareaText} />
                 </div>
                 <div className="flex-col">
                     {repoData !== undefined && repoData !== null ? (
                         Object.values(repoData).map((value, index) => (
-                            <div key={index} className='flex justify-center'>
-                                <CardLg RepoId={value.id} RepoName={value.name} RepoURL={value.html_url} getDependencies={getDependencies}/>
+                            <div key={index} className="flex justify-center">
+                                <CardLg
+                                    RepoId={index}
+                                    RepoName={value.name}
+                                    RepoURL={value.html_url}
+                                    getDependencies={getDependencies}
+                                />
                             </div>
                         ))
                     ) : (
