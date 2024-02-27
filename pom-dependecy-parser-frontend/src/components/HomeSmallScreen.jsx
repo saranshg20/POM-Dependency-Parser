@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Loader from "./Loader";
-import DialogBox from "./DialogBox";
 import TextArea from "./TextArea";
 import CardLg from "./CardLg";
 import { useNavigate } from "react-router-dom";

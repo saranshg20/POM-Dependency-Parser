@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Loader from "./Loader";
-import DialogBox from "./DialogBox";
-import Card from "./Card";
 import { useNavigate } from "react-router-dom";
 import CardLg from "./CardLg";
-import Error from "./Error";
 import TextArea from "./TextArea";
 
 function HomeLargeScreen(props) {
