@@ -6,7 +6,6 @@ function TextArea(props) {
         navigator.clipboard
             .writeText(textareaRef.current.value)
             .then(() => {
-                console.log("Text copied to clipboard");
             })
             .catch((err) => {
                 console.error("Could not copy text: ", err);
@@ -19,7 +18,7 @@ function TextArea(props) {
                 readOnly
                 value={props.content}
                 ref={textareaRef}
-                className={`${props.isSmallScreen ? 'p-8': 'p-4'} rounded-md overflow-auto border border-black`}
+                className={`${props.isSmallScreen ? 'p-8': 'p-4'} resize-y rounded-md overflow-auto border border-black`}
                 placeholder="Select Repository to retrieve POM dependencies"
                 style={{
                     resize: "none",
