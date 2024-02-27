@@ -88,7 +88,6 @@ function HomeLargeScreen(props) {
                 return response.json();
             })
             .then((data) => {
-                console.log(JSON.stringify(data));
                 setTextArea(JSON.stringify(data));
             })
             .catch((error) => {

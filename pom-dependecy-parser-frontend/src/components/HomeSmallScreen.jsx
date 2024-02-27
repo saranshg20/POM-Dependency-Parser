@@ -37,7 +37,6 @@ function HomeSmallScreen(props) {
     }
 
     async function getRepositories() {
-        console.log(localStorage.getItem("accessToken"));
         await fetch(backend_url + "/repositories", {
             method: "GET",
             credentials: "include",
@@ -55,7 +54,6 @@ function HomeSmallScreen(props) {
                 values.sort(
                     (a, b) => new Date(b.created_at) - new Date(a.created_at)
                 );
-                console.log(values);
                 setRepoData(values);
             })
             .catch((error) => {
@@ -88,7 +86,6 @@ function HomeSmallScreen(props) {
                 return response.json();
             })
             .then((data) => {
-                console.log(JSON.stringify(data));
                 setTextArea(JSON.stringify(data));
             })
             .catch((error) => {

@@ -20,7 +20,6 @@ function LoginLargeScreen() {
         const code = urlParams.get("code");
 
         if (localStorage.getItem("accessToken") !== null) {
-            console.log("Navigating to /home");
             navigate("/home");
         } else if (code && localStorage.getItem("accessToken") === null) {
             setIsLoading(true);
@@ -36,7 +35,6 @@ function LoginLargeScreen() {
                     );
 
                     const data = await response.json();
-                    console.log(data);
 
                     if (data.access_token) {
                         localStorage.setItem("accessToken", data.access_token);
