@@ -61,6 +61,7 @@ function HomeSmallScreen(props) {
     }
 
     async function getDependencies(repoIdx) {
+        setIsLoading(true);
         try {
             const repoName = repoData[repoIdx].name;
             const user = userData.login;
@@ -94,6 +95,7 @@ function HomeSmallScreen(props) {
         } catch (error) {
             console.log(error);
         }
+        setIsLoading(false);
     }
 
     function logoutUser() {
@@ -108,9 +110,16 @@ function HomeSmallScreen(props) {
     }
 
     useEffect(() => {
+        const isAuthenticated = localStorage.getItem('accessToken') !== null;
+        if(!isAuthenticated){
+            alert("Please authenticate to get access!");
+            navigate('/login');
+        }
+        setIsLoading(true);
         getUserData();
         getRepositories();
-        setRerender(!rerender);
+        // setRerender(!rerender);
+        setIsLoading(false);
     }, []);
 
 

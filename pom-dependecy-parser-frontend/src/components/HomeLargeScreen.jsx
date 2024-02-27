@@ -61,6 +61,7 @@ function HomeLargeScreen(props) {
     }
 
     async function getDependencies(repoIdx) {
+        setIsLoading(true);
         try {
             const repoName = repoData[repoIdx].name;
             const user = userData.login;
@@ -94,6 +95,7 @@ function HomeLargeScreen(props) {
         } catch (error) {
             console.log(error);
         }
+        setIsLoading(false);
     }
 
     function logoutUser() {
@@ -108,6 +110,11 @@ function HomeLargeScreen(props) {
     }
 
     useEffect(() => {
+        const isAuthenticated = localStorage.getItem('accessToken') !== null;
+        if(!isAuthenticated){
+            alert("Please authenticate to get access!");
+            navigate('/login');
+        }
         setIsLoading(true);
         getUserData();
         getRepositories();
@@ -141,7 +148,6 @@ function HomeLargeScreen(props) {
                 </div>
                 <div className="flex justify-center">
                     <TextArea isSmallScreen={false} width="w-1/2" content={textareaText} />
-                    {console.log("TextArea updated")}
                 </div>
                 <div className="flex-col">
                     {repoData !== undefined && repoData !== null ? (

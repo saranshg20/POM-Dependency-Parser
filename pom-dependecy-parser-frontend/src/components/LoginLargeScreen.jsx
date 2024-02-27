@@ -80,15 +80,15 @@ function LoginLargeScreen() {
                 </div>
                 <div className="text-center mb-8">
                     <button
-                        className="bg-slate-800 p-3 rounded-md shadow-lg text-white"
+                        className="bg-slate-800 p-2 hover:bg-slate-600 rounded-md shadow-lg text-white"
                         onClick={loginWithGithub}
                     >
-                        <div className="flex">
-                            <div className="mr-2">Connect with Github</div>
+                        <div className="flex items-center">
+                            <div className="mr-0">Connect with Github</div>
                             <img
-                                width="30"
-                                height="30"
-                                src="https://img.icons8.com/ios-filled/50/FFFFFF/github.png"
+                                width="50"
+                                height="50"
+                                src="https://img.icons8.com/plasticine/100/github.png"
                                 alt="github"
                             />
                         </div>
