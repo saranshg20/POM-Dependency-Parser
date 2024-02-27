@@ -21,7 +21,7 @@ function TextArea(props) {
                 className={`${props.isSmallScreen ? 'p-8': 'p-4'} resize-y rounded-md overflow-auto border border-black`}
                 placeholder="Select Repository to retrieve POM dependencies"
                 style={{
-                    resize: "none",
+                    resize: "vertical",
                     maxHeight: "200px",
                     opacity: 1,
                     width: "100%",
